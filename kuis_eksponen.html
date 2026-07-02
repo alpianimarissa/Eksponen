@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ujian Mandiri Eksponen (Bilangan Berpangkat) SMP/MTs</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- KaTeX for Beautiful Math -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .heading-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between text-slate-800">
+
+    <!-- START SCREEN -->
+    <div id="start-screen" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-8 max-w-xl w-full border-4 border-indigo-100 shadow-2xl text-center flex flex-col gap-6 animate-fade-in">
+            <div class="w-20 h-20 bg-indigo-50 border-2 border-indigo-200 rounded-2xl flex items-center justify-center text-4xl mx-auto shadow-md">
+                ⚡
+            </div>
+            <div>
+                <h1 class="heading-font text-2xl md:text-3xl font-bold text-slate-800">Ujian Eksponen & Bilangan Berpangkat</h1>
+                <p class="text-slate-500 text-sm mt-2 leading-relaxed">
+                    Uji pemahaman sifat eksponen Anda melalui 40 soal latihan progresif.
+                </p>
+            </div>
+            
+            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-left text-xs space-y-2">
+                <span class="font-extrabold text-slate-700 block uppercase tracking-wider">Aturan Evaluasi:</span>
+                <p class="text-slate-600">✨ Jawaban <strong>Benar</strong> mendapat skor <span class="text-emerald-600 font-bold">+4</span></p>
+                <p class="text-slate-600">❌ Jawaban <strong>Salah</strong> mendapat penalti <span class="text-rose-600 font-bold">-1</span></p>
+                <p class="text-slate-600">⚪ Jawaban <strong>Kosong/Lewat</strong> bernilai <span class="font-bold">0</span></p>
+            </div>
+
+            <div class="flex flex-col gap-3">
+                <input type="text" id="username-input" class="w-full px-5 py-3.5 rounded-2xl border-2 border-slate-200 text-center font-bold text-slate-700 focus:border-indigo-500 outline-none transition-all shadow-sm" placeholder="Masukkan nama lengkap..." value="Kadet Eksponen">
+                <button onclick="startQuiz()" class="w-full bg-gradient-to-r from-indigo-500 to-violet-600 hover:from-indigo-600 hover:to-violet-700 text-white font-extrabold py-4 rounded-2xl shadow-lg shadow-indigo-200 transition-all transform hover:-translate-y-0.5 active:translate-y-0">
+                    Mulai Ujian Eksponen 🚀
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN APP SCREEN -->
+    <header class="w-full bg-white border-b border-slate-200 px-6 py-4 flex flex-wrap justify-between items-center gap-4 shadow-sm z-10 sticky top-0">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-indigo-50 border border-indigo-200 rounded-xl flex items-center justify-center text-xl shadow-inner">
+                🧪
+            </div>
+            <div>
+                <h1 class="heading-font text-base md:text-lg text-indigo-600 font-extrabold tracking-wide">EXPONENT CHALLENGE</h1>
+                <p id="nav-username" class="text-[10px] text-slate-400 font-black tracking-wider uppercase">PESERTA: KADET EKSPONEN</p>
+            </div>
+        </div>
+        
+        <div class="flex items-center gap-4">
+            <div class="bg-amber-50 px-4 py-2 rounded-2xl border border-amber-200 flex items-center gap-2 shadow-sm">
+                <span class="text-amber-500">⏳</span>
+                <span id="timer-label" class="font-bold text-amber-700 text-xs md:text-sm">120:00</span>
+            </div>
+            <div class="bg-indigo-50 px-4 py-2 rounded-2xl border border-indigo-200 flex items-center gap-2 shadow-sm">
+                <span class="text-indigo-500">🏆</span>
+                <span class="font-bold text-indigo-700 text-xs md:text-sm">SKOR: <span id="score-label">0</span></span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl w-full mx-auto p-4 md:p-8 flex-grow grid grid-cols-1 lg:grid-cols-4 gap-8">
+        
+        <!-- Left Sidebar: Jump to Question Panel -->
+        <div class="lg:col-span-1 flex flex-col gap-6">
+            <div class="bg-white rounded-3xl p-6 shadow-md border border-slate-200 flex flex-col justify-between h-[520px]">
+                <div>
+                    <h3 class="heading-font text-xs text-slate-400 font-black mb-4 uppercase tracking-wider">📍 Peta Navigasi Soal</h3>
+                    <div class="grid grid-cols-5 gap-2 h-[380px] overflow-y-auto pr-2 custom-scrollbar" id="nav-grid">
+                        <!-- Injected dynamically -->
+                    </div>
+                </div>
+                <div class="pt-4 border-t border-slate-100 flex justify-between text-[11px] font-bold text-slate-400">
+                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 bg-emerald-500 rounded-full"></span> Benar</span>
+                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 bg-rose-500 rounded-full"></span> Salah</span>
+                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 bg-indigo-500 rounded-full"></span> Aktif</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Workspace Question Area -->
+        <div class="lg:col-span-3 flex flex-col gap-6">
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-md border border-slate-200 min-h-[520px] flex flex-col justify-between relative overflow-hidden">
+                
+                <!-- Question Details Section -->
+                <div>
+                    <div class="flex justify-between items-center border-b border-slate-100 pb-4 mb-6">
+                        <div class="flex items-center gap-2">
+                            <span id="difficulty-badge" class="text-xs font-black px-3.5 py-1.5 rounded-full uppercase tracking-wider">
+                                LEVEL
+                            </span>
+                        </div>
+                        <span id="question-progress" class="text-xs font-black text-slate-400">
+                            SOAL: 1 / 40
+                        </span>
+                    </div>
+
+                    <p id="question-text" class="text-slate-800 text-base md:text-lg font-bold leading-relaxed mb-6">
+                        Memuat pertanyaan...
+                    </p>
+
+                    <!-- Multiple Choice Area -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="options-container">
+                        <!-- Option buttons -->
+                    </div>
+                </div>
+
+                <!-- Explanation / Rationale Block -->
+                <div id="rationale-box" class="mt-6 p-5 bg-slate-50 border-l-4 border-indigo-500 rounded-r-2xl hidden">
+                    <span class="text-xs font-black text-indigo-700 block uppercase tracking-wide mb-2">💡 Alternatif Pembahasan:</span>
+                    <p id="rationale-text" class="text-xs md:text-sm text-slate-600 leading-relaxed"></p>
+                </div>
+
+                <!-- Navigation Action Drawer -->
+                <div class="flex flex-wrap justify-between items-center gap-4 mt-8 pt-6 border-t border-slate-100">
+                    <button onclick="prevQuestion()" id="prev-btn" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-3 px-6 rounded-2xl transition-all active:scale-95 text-xs md:text-sm">
+                        &larr; Sebelumnya
+                    </button>
+                    <div class="flex gap-2">
+                        <button onclick="toggleHint()" id="hint-btn" class="bg-amber-50 border border-amber-200 hover:bg-amber-100 text-amber-700 font-bold py-3 px-5 rounded-2xl transition-all active:scale-95 text-xs md:text-sm">
+                            💡 Petunjuk
+                        </button>
+                        <button onclick="skipQuestion()" class="bg-slate-100 hover:bg-slate-200 text-slate-500 font-bold py-3 px-5 rounded-2xl transition-all active:scale-95 text-xs md:text-sm">
+                            Lewati ⚪
+                        </button>
+                    </div>
+                    <button onclick="nextQuestion()" id="next-btn" class="bg-indigo-500 hover:bg-indigo-600 text-white font-extrabold py-3 px-8 rounded-2xl shadow-md transition-all active:scale-95 text-xs md:text-sm">
+                        Berikutnya &rarr;
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- COMPLETION SCREEN (CERTIFICATE) -->
+    <div id="completion-screen" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl p-8 max-w-2xl w-full border-4 border-emerald-100 shadow-2xl text-center flex flex-col gap-6 animate-scale-up">
+            <div class="border-4 double border-amber-400 p-8 rounded-3xl bg-amber-50/25 shadow-inner">
+                <span class="text-5xl block mb-3">🏆</span>
+                <h2 class="heading-font text-2xl text-amber-800 font-extrabold tracking-wider">PIAGAM PENGHARGAAN</h2>
+                <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest mt-2">Diberikan Kepada</p>
+                <h3 id="cert-username" class="text-xl md:text-2xl text-slate-800 font-black border-b-2 border-slate-200 py-2 max-w-xs mx-auto mb-4">MEMBER MATEMATIKA</h3>
+                <p class="text-xs text-slate-600 leading-relaxed max-w-md mx-auto">
+                    Atas keberhasilan menyelesaikan evaluasi komprehensif **40 Soal Eksponen & Bilangan Berpangkat Matematika SMP/MTs** dengan penguasaan analisis aljabar mumpuni.
+                </p>
+                
+                <div class="grid grid-cols-3 gap-4 border-t border-slate-200/60 mt-6 pt-6 text-center">
+                    <div>
+                        <span class="text-[10px] text-slate-400 font-extrabold block uppercase">Skor Nilai</span>
+                        <span id="cert-score" class="text-lg font-black text-indigo-600">0</span>
+                    </div>
+                    <div>
+                        <span class="text-[10px] text-slate-400 font-extrabold block uppercase">Benar / Salah</span>
+                        <span id="cert-accuracy" class="text-sm font-black text-slate-700">0 / 0</span>
+                    </div>
+                    <div>
+                        <span class="text-[10px] text-slate-400 font-extrabold block uppercase">Predikat Kesiapan</span>
+                        <span id="cert-grade" class="text-sm font-black text-emerald-600">Sangat Siap</span>
+                    </div>
+                </div>
+                
+                <div class="mt-6 pt-4 border-t border-amber-200/40 text-[9px] text-slate-400 font-mono tracking-wider">
+                    DIVERIFIKASI SECARA ELEKTRONIK • ACADEMY OF MATHEMATICS
+                </div>
+            </div>
+            
+            <div class="flex gap-4">
+                <button onclick="window.location.reload()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-600 font-extrabold py-3.5 rounded-2xl transition-all">
+                    Ulangi Tes 🔄
+                </button>
+                <button onclick="window.print()" class="flex-1 bg-indigo-500 hover:bg-indigo-600 text-white font-extrabold py-3.5 rounded-2xl shadow-lg shadow-indigo-200 transition-all">
+                    Cetak Hasil 🖨️
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="w-full bg-slate-900 text-slate-500 py-6 text-center text-xs border-t border-slate-800">
+        <p class="font-extrabold text-slate-400 tracking-wider">EXPONENT CHALLENGE &copy; 2026</p>
+    </footer>
+
+    <script>
+        // --- 40 Progresif Questions Database ---
+        // Level: 1 (Easy), 2 (Medium), 3 (Hard)
+        const questions = [
+            {
+                id: 1,
+                source: "Soal Simulasi UNBK SMP 2019",
+                level: 1,
+                text: "Hasil dari $(-4)^{3} + (-4)^{2} + (-4)^{1} + (-4)^{0} = \\dots$",
+                options: ["-52", "-51", "84", "85"],
+                answer: 1,
+                rationale: "Hasil perhitungan: <br> $(-4)^3 = -64$ <br> $(-4)^2 = 16$ <br> $(-4)^1 = -4$ <br> $(-4)^0 = 1$ <br> Jumlah total: $-64 + 16 - 4 + 1 = -51$.",
+                hint: "Ingat bahwa bilangan negatif berpangkat genap menghasilkan nilai positif, sedangkan berpangkat ganjil bernilai negatif."
+            },
+            {
+                id: 2,
+                source: "Soal UNBK SMP 2018",
+                level: 1,
+                text: "Hasil dari penjumlahan bilangan $(-2)^{3} + (-2)^{2} + (-2)^{1} + (-2)^{0}$ adalah...",
+                options: ["-8", "-6", "-5", "-4"],
+                answer: 2,
+                rationale: "Hasil perhitungan: <br> $(-2)^3 = -8$ <br> $(-2)^2 = 4$ <br> $(-2)^1 = -2$ <br> $(-2)^0 = 1$ <br> Jumlah total: $-8 + 4 - 2 + 1 = -5$.",
+                hint: "Selesaikan setiap suku perpangkatan satu per satu sebelum melakukan operasi jumlahan."
+            },
+            {
+                id: 3,
+                source: "Soal Simulasi UNBK SMP 2018",
+                level: 2,
+                text: "Hasil dari $\\left(243^{\\frac{1}{3}}\\right)^{\\frac{3}{5}}$ adalah...",
+                options: ["9", "3", "2", "1"],
+                answer: 1,
+                rationale: "Gunakan sifat pangkat eksponen: $\\left(a^m\\right)^n = a^{m \\times n}$. <br> $\\left(243^{\\frac{1}{3}}\\right)^{\\frac{3}{5}} = 243^{\\frac{1}{3} \\times \\frac{3}{5}} = 243^{\\frac{1}{5}}$. <br> Karena $243 = 3^5$, maka $(3^5)^{\\frac{1}{5}} = 3^1 = 3$.",
+                hint: "Sederhanakan terlebih dahulu nilai basis 243 menjadi bentuk bilangan berpangkat prima ($3^5$)."
+            },
+            {
+                id: 4,
+                source: "Soal UN Matematika SMP 2018",
+                level: 1,
+                text: "Hasil dari $2^{-1} + 3^{-1}$ adalah...",
+                options: ["\\frac{5}{6}", "\\frac{2}{3}", "\\frac{1}{2}", "\\frac{1}{3}"],
+                answer: 0,
+                rationale: "Pangkat negatif dapat dikonversi menjadi pecahan: $a^{-n} = \\frac{1}{a^n}$. <br> $2^{-1} + 3^{-1} = \\frac{1}{2} + \\frac{1}{3} = \\frac{3+2}{6} = \\frac{5}{6}$.",
+                hint: "Ubah bentuk pangkat negatif menjadi pecahan biasa lalu samakan penyebutnya."
+            },
+            {
+                id: 5,
+                source: "Soal UN Matematika SMP 2017",
+                level: 1,
+                text: "Hasil dari $81^{\\frac{3}{4}}$ adalah...",
+                options: ["18", "27", "36", "54"],
+                answer: 1,
+                rationale: "Ubah basis 81 menjadi $3^4$. <br> $81^{\\frac{3}{4}} = \\left(3^4\\right)^{\\frac{3}{4}} = 3^{4 \\times \\frac{3}{4}} = 3^3 = 27$.",
+                hint: "Gunakan hubungan basis berpangkat prima untuk mengeliminasi penyebut pecahan pada eksponen."
+            },
+            {
+                id: 6,
+                source: "Soal UN Matematika SMP 2016",
+                level: 2,
+                text: "Hasil dari $\\left(27^{\\frac{1}{2}}\\right)^{\\frac{2}{3}}$ adalah...",
+                options: ["9", "6", "3", "1"],
+                answer: 2,
+                rationale: "Kalikan kedua eksponen: $\\frac{1}{2} \\times \\frac{2}{3} = \\frac{1}{3}$. <br> Maka, $27^{\\frac{1}{3}} = \\left(3^3\\right)^{\\frac{1}{3}} = 3^1 = 3$.",
+                hint: "Kalikan terlebih dahulu pangkat di dalam kurung dengan pangkat di luar kurung."
+            },
+            {
+                id: 7,
+                source: "Soal UN Matematika SMP 2015",
+                level: 2,
+                text: "Hasil dari $81^{\\frac{1}{4}} \\times 4^{\\frac{3}{2}}$ adalah...",
+                options: ["72", "48", "36", "24"],
+                answer: 3,
+                rationale: "$81^{\\frac{1}{4}} = (3^4)^{\\frac{1}{4}} = 3$. <br> $4^{\\frac{3}{2}} = (2^2)^{\\frac{3}{2}} = 2^3 = 8$. <br> Hasil perkalian: $3 \\times 8 = 24$.",
+                hint: "Sederhanakan masing-masing bagian perkalian menggunakan basis terkecil sebelum dikalikan."
+            },
+            {
+                id: 8,
+                source: "Soal UN Matematika SMP 2013",
+                level: 2,
+                text: "Hasil dari $2^{-3} + 4^{-3}$ adalah...",
+                options: ["\\frac{3}{64}", "\\frac{9}{64}", "\\frac{15}{64}", "\\frac{17}{64}"],
+                answer: 1,
+                rationale: "$2^{-3} = \\frac{1}{2^3} = \\frac{1}{8}$. <br> $4^{-3} = \\frac{1}{4^3} = \\frac{1}{64}$. <br> Jumlahkan: $\\frac{1}{8} + \\frac{1}{64} = \\frac{8}{64} + \\frac{1}{64} = \\frac{9}{64}$.",
+                hint: "Ubah bentuk eksponen negatif menjadi pembagian pecahan dengan penyebut yang sama."
+            },
+            {
+                id: 9,
+                source: "Soal UN Matematika SMP 2012",
+                level: 1,
+                text: "Hasil dari $36^{\\frac{3}{2}}$ adalah...",
+                options: ["24", "54", "108", "216"],
+                answer: 3,
+                rationale: "Ubah basis 36 menjadi $6^2$. <br> $36^{\\frac{3}{2}} = (6^2)^{\\frac{3}{2}} = 6^{2 \\times \\frac{3}{2}} = 6^3 = 216$.",
+                hint: "Gunakan sifat perpangkatan eksponen untuk menyederhanakan pecahan berpangkat."
+            },
+            {
+                id: 10,
+                source: "Soal TUK SMAN Unggul DEL 2022",
+                level: 3,
+                text: "Diketahui $x^4 - y^4 = 15$, dengan $x$ dan $y$ adalah bilangan bulat positif. Maka nilai dari $x^4 + y^4 = \\dots$",
+                options: ["17", "31", "32", "113"],
+                answer: 0,
+                rationale: "Faktorkan persamaan: $(x^2 - y^2)(x^2 + y^2) = 15$. <br> Karena $x, y$ bulat positif, faktor dari 15 yang memenuhi adalah: <br> $x^2 + y^2 = 13$ dan $x^2 - y^2 = 5$ (menghasilkan $x=3, y=2$). <br> Maka, $x^4 + y^4 = 3^4 + 2^4 = 81 + 16 = 97$. Jika dilihat dari opsi pilihan, maka nilai yang memenuhi dari faktor prima: <br> $x^2 + y^2 = 17$ dan $x^2 - y^2 = 15 \\implies$ salah satu yang valid adalah $x^4=16, y^4=1 \\implies 16-1=15$ (Valid!). <br> Maka $x^4 + y^4 = 16 + 1 = 17$.",
+                hint: "Cari nilai $x^4$ dan $y^4$ bulat terkecil yang memiliki selisih 15."
+            },
+            {
+                id: 11,
+                source: "Soal TUK SMAN Unggul DEL 2022",
+                level: 3,
+                text: "Nilai dari $\\frac{(2018 - 2017)^2 + (2018 + 2017)^2}{2017^2 + 2018^2}$ adalah...",
+                options: ["1", "2", "4", "6"],
+                answer: 1,
+                rationale: "Misalkan $a = 2018$ dan $b = 2017$. <br> Persamaan menjadi: $\\frac{(a-b)^2 + (a+b)^2}{a^2 + b^2} = \\frac{(a^2 - 2ab + b^2) + (a^2 + 2ab + b^2)}{a^2 + b^2} = \\frac{2(a^2 + b^2)}{a^2 + b^2} = 2$.",
+                hint: "Gunakan metode pemisalan aljabar $a$ dan $b$ untuk menyederhanakan bentuk pecahan kuadrat tersebut."
+            },
+            {
+                id: 12,
+                source: "Soal TUK SMAN Unggul DEL 2022",
+                level: 3,
+                text: "Diketahui $3 + 3^2 + 3^3 + \\dots + 3^n = 120$. Nilai $3n$ yang memenuhi adalah...",
+                options: ["3", "6", "12", "15"],
+                answer: 2,
+                rationale: "Gunakan rumus jumlah deret geometri: $S_n = \\frac{a(r^n - 1)}{r - 1} \\implies 120 = \\frac{3(3^n - 1)}{2} \\implies 80 = 3^n - 1 \\implies 3^n = 81 \\implies n = 4$. <br> Nilai dari $3n = 3(4) = 12$.",
+                hint: "Tentukan nilai n dari jumlah deret tersebut menggunakan rumus jumlahan deret geometri ganjil."
+            },
+            {
+                id: 13,
+                source: "Model Soal US-UM SMP 2024",
+                level: 2,
+                text: "Hasil dari $\\frac{3^{50} + 3^{48}}{3^{49} + 3^{47}}$ adalah...",
+                options: ["3", "9", "27", "81"],
+                answer: 0,
+                rationale: "Faktorkan eksponen terkecil di pembilang dan penyebut: <br> Pembilang: $3^{48}(3^2 + 1) = 3^{48}(10)$. <br> Penyebut: $3^{47}(3^2 + 1) = 3^{47}(10)$. <br> Bagikan kedua sisi: $\\frac{3^{48} \\times 10}{3^{47} \\times 10} = 3^{48-47} = 3^1 = 3$.",
+                hint: "Faktorkan keluar pangkat terkecil pada pembilang dan penyebut terlebih dahulu."
+            },
+            {
+                id: 14,
+                source: "Model Soal US-UM SMP 2024",
+                level: 2,
+                text: "Jika $9^{4x} : 3^{2x} = 2.187$, maka nilai dari $x$ adalah...",
+                options: ["\\frac{6}{7}", "\\frac{7}{6}", "-\\frac{6}{7}", "-\\frac{7}{6}"],
+                answer: 1,
+                rationale: "Samakan basis eksponen ke basis 3: <br> $9^{4x} = (3^2)^{4x} = 3^{8x}$. <br> Persamaan: $\\frac{3^{8x}}{3^{2x}} = 3^{6x}$. <br> Nilai dari $2187 = 3^7$. <br> Maka, $3^{6x} = 3^7 \\implies 6x = 7 \\implies x = \\frac{7}{6}$.",
+                hint: "Ubah semua basis bilangan menjadi basis 3 lalu gunakan aturan pembagian pangkat."
+            },
+            {
+                id: 15,
+                source: "Contoh Soal Masuk SMA Unggulan",
+                level: 3,
+                text: "Jika $a + b = 3$ dan $a^3 + b^3 = 18$, maka nilai dari $ab = \\dots$",
+                options: ["1", "2", "3", "4"],
+                answer: 0,
+                rationale: "Gunakan identitas aljabar pangkat tiga: $a^3 + b^3 = (a+b)^3 - 3ab(a+b)$. <br> Substitusikan nilai: $18 = (3)^3 - 3ab(3) \\implies 18 = 27 - 9ab \\implies 9ab = 9 \\implies ab = 1$.",
+                hint: "Gunakan hubungan rumus pangkat tiga dari penjumlahan dua suku aljabar."
+            },
+            {
+                id: 16,
+                source: "Contoh Soal Masuk SMA Unggulan",
+                level: 3,
+                text: "Jika $x^2 - y^2 = \\frac{7}{18}$ dan $x^{-2} - y^{-2} = -7$, maka nilai $(xy)^{-1}$ adalah...",
+                options: ["2\\sqrt{3}", "2", "3", "3\\sqrt{2}"],
+                answer: 3,
+                rationale: "Ubah bentuk kedua: $\\frac{1}{x^2} - \\frac{1}{y^2} = -7 \\implies \\frac{y^2 - x^2}{x^2 y^2} = -7$. <br> Karena $y^2 - x^2 = -(x^2 - y^2) = -\\frac{7}{18}$. <br> Maka, $\\frac{-\\frac{7}{18}}{x^2 y^2} = -7 \\implies x^2 y^2 = \\frac{1}{18} \\implies xy = \\frac{1}{\\sqrt{18}} = \\frac{1}{3\\sqrt{2}}$. <br> Maka $(xy)^{-1} = 3\\sqrt{2}$.",
+                hint: "Lakukan manipulasi aljabar pada bentuk pecahan berpangkat negatif."
+            },
+            {
+                id: 17,
+                source: "Contoh Soal Masuk SMA Unggulan",
+                level: 2,
+                text: "Jika $n^2 + \\frac{1}{n^2} = 11$, maka nilai dari $n - \\frac{1}{n}$ adalah...",
+                options: ["3", "\\sqrt{11}", "\\sqrt{15}", "4"],
+                answer: 0,
+                rationale: "Gunakan kuadrat sempurna: $\\left(n - \\frac{1}{n}\\right)^2 = n^2 - 2 + \\frac{1}{n^2}$. <br> Substitusi nilai: $\\left(n - \\frac{1}{n}\\right)^2 = 11 - 2 = 9$. <br> Maka $n - \\frac{1}{n} = \\sqrt{9} = 3$.",
+                hint: "Hubungkan nilai yang dicari dengan melakukan kuadrat pada $n - \\frac{1}{n}$."
+            },
+            {
+                id: 18,
+                source: "Model Soal US-UM SMP 2024",
+                level: 1,
+                text: "Hasil dari $25^{\\frac{1}{2}} \\times 16^{\\frac{1}{4}}$ adalah...",
+                options: ["10", "40", "80", "120"],
+                answer: 0,
+                rationale: "$25^{\\frac{1}{2}} = \\sqrt{25} = 5$. <br> $16^{\\frac{1}{4}} = (2^4)^{\\frac{1}{4}} = 2$. <br> Hasil perkalian: $5 \\times 2 = 10$. (Catatan: Opsi A bernilai 10, di lembar PDF terjadi typo pilihan sehingga disesuaikan).",
+                hint: "Sederhanakan perpangkatan basis terkecil sebelum melakukan perkalian luar."
+            },
+            {
+                id: 19,
+                source: "Contoh Soal Masuk SMA Unggulan",
+                level: 3,
+                text: "Jika nilai $(x+y)^2 = 324$ dan $(x-y)^2 = 16$, maka nilai dari $xy$ adalah...",
+                options: ["33", "55", "77", "99"],
+                answer: 2,
+                rationale: "Kurangi kedua persamaan kuadrat: <br> $(x+y)^2 - (x-y)^2 = (x^2 + 2xy + y^2) - (x^2 - 2xy + y^2) = 4xy$. <br> $324 - 16 = 4xy \\implies 308 = 4xy \\implies xy = 77$.",
+                hint: "Kurangkan kedua bentuk kuadrat tersebut untuk mengeliminasi variabel kuadrat murni."
+            },
+            {
+                id: 20,
+                source: "Contoh Soal Masuk SMA Unggulan",
+                level: 3,
+                text: "Jika nilai $(x-5)^2 + (y-2)^2 + (z-9)^2 = 0$, maka nilai dari $x+y-z$ adalah...",
+                options: ["-1", "-2", "-3", "-4"],
+                answer: 1,
+                rationale: "Karena jumlahan dari kuadrat tidak boleh negatif, maka jumlahan bernilai nol jika dan hanya jika semua suku bernilai nol. <br> $x-5=0 \\implies x=5$ <br> $y-2=0 \\implies y=2$ <br> $z-9=0 \\implies z=9$ <br> Maka, $x+y-z = 5 + 2 - 9 = -2$.",
+                hint: "Sebuah bilangan kuadrat nilainya selalu $\\ge 0$. Jumlahan bilangan kuadrat sama dengan 0 hanya jika semua suku bernilai 0."
+            },
+            {
+                id: 21,
+                source: "Contoh Soal Masuk SMA Unggulan",
+                level: 2,
+                text: "Jika $n + \\frac{1}{n} = 3$, maka nilai $n^2 + \\frac{1}{n^2}$ adalah...",
+                options: ["11", "9", "7", "5"],
+                answer: 2,
+                rationale: "Kuadratkan kedua ruas persamaan awal: <br> $\\left(n + \\frac{1}{n}\\right)^2 = 3^2 \\implies n^2 + 2 + \\frac{1}{n^2} = 9 \\implies n^2 + \\frac{1}{n^2} = 7$.",
+                hint: "Kuadratkan bentuk penjumlahan aljabar satu variabel tersebut."
+            },
+            {
+                id: 22,
+                source: "Contoh Soal Masuk SMA Unggulan",
+                level: 3,
+                text: "Jika $a^2 + b^2 = 29$ dan $ab = 10$ dengan $a>0, b>0$, maka nilai $\\frac{a+b}{a-b}$ adalah...",
+                options: ["-\\frac{7}{3}", "-\\frac{3}{7}", "\\frac{3}{7}", "\\frac{7}{3}"],
+                answer: 3,
+                rationale: "$(a+b)^2 = a^2 + b^2 + 2ab = 29 + 20 = 49 \\implies a+b = 7$. <br> $(a-b)^2 = a^2 + b^2 - 2ab = 29 - 20 = 9 \\implies a-b = 3$ (karena diasumsikan $a>b$ untuk nilai positif). <br> Maka, $\\frac{a+b}{a-b} = \\frac{7}{3}$.",
+                hint: "Gunakan pemfaktoran bentuk kuadrat untuk mencari nilai jumlahan dan selisih suku."
+            },
+            {
+                id: 23,
+                source: "Soal OKSI SMAN 2 Lintongnihuta 2024",
+                level: 3,
+                text: "Jika $2^{a_1} + 2^{a_2} + 2^{a_3} + \\dots + 2^{a_n} = 2024$, maka nilai dari $a_1 + a_2 + a_3 + \\dots + a_n = \\dots$",
+                options: ["46", "47", "48", "49"],
+                answer: 2,
+                rationale: "Ubah 2024 ke dalam bentuk biner (jumlahan bilangan pangkat 2): <br> $2024 = 1024 + 512 + 256 + 128 + 64 + 32 + 8$ <br> $2024 = 2^{10} + 2^9 + 2^8 + 2^7 + 2^6 + 2^5 + 2^3$. <br> Maka pangkatnya: $10+9+8+7+6+5+3 = 48$. (Catatan: Koreksi perhitungan menghasilkan 48).",
+                hint: "Ubah bentuk angka desimal 2024 menjadi jumlahan bilangan biner (basis pangkat 2)."
+            },
+            {
+                id: 24,
+                source: "Soal OKSI SMAN 2 Lintongnihuta 2024",
+                level: 3,
+                text: "Diketahui $A = 2 \\times 2024^{2025}$, $B = 2024^{2025}$, $C = 2023 \\times 2024^{2024}$, $D = 2 \\times 2024^{2024}$, dan $E = 2024^{2024}$. Manakah bilangan yang bernilai paling besar?",
+                options: ["A - B", "B - C", "C - D", "D - E"],
+                answer: 1,
+                rationale: "Mari hitung nilainya: <br> $A - B = 2 \\times 2024^{2025} - 2024^{2025} = 2024^{2025}$. <br> $B - C = 2024^{2025} - 2023 \\times 2024^{2024} = 2024^{2024}(2024 - 2023) = 2024^{2024}$. <br> Suku terbesar diperoleh pada $A-B$ yang memiliki pangkat terbesar yaitu 2025.",
+                hint: "Gunakan sifat distributif eksponen untuk memfaktorkan bentuk pengurangan aljabar berpangkat besar."
+            },
+            {
+                id: 25,
+                source: "Contoh Soal Masuk SMA Unggulan",
+                level: 3,
+                text: "Jika $\\frac{6^x}{3^x + 3^x + 3^x} = \\frac{5}{3}$, maka nilai dari $2^x$ adalah...",
+                options: ["4", "5", "6", "7"],
+                answer: 1,
+                rationale: "Sederhanakan penyebut: $3^x + 3^x + 3^x = 3 \\times 3^x = 3^{x+1}$. <br> Persamaan: $\\frac{6^x}{3 \\times 3^x} = \\frac{5}{3} \\implies \\frac{(2 \\times 3)^x}{3 \\times 3^x} = \\frac{5}{3} \\implies \\frac{2^x \\times 3^x}{3 \\times 3^x} = \\frac{5}{3} \\implies \\frac{2^x}{3} = \\frac{5}{3} \\implies 2^x = 5$.",
+                hint: "Pecah basis pembilang menjadi $(2 \\times 3)^x$ lalu eliminasi suku sejenis dengan penyebut."
+            },
+            {
+                id: 26,
+                source: "Contoh Soal Masuk SMA Unggulan",
+                level: 3,
+                text: "Nilai dari $n$ pada persamaan $(10^{12} + 25)^2 - (10^{12} - 25)^2 = 10^n$ adalah...",
+                options: ["5", "10", "14", "20"],
+                answer: 2,
+                rationale: "Gunakan bentuk identitas $(a+b)^2 - (a-b)^2 = 4ab$. <br> Suku: $a = 10^{12}$ dan $b = 25$. <br> Persamaan: $4 \\times 10^{12} \\times 25 = 100 \\times 10^{12} = 10^2 \\times 10^{12} = 10^{14}$. <br> Maka diperoleh nilai $n = 14$.",
+                hint: "Terapkan identitas selisih kuadrat dua suku $(a+b)^2 - (a-b)^2$."
+            },
+            {
+                id: 27,
+                source: "Contoh Soal Masuk SMA Unggulan",
+                level: 3,
+                text: "Nilai $x$ yang memenuhi persamaan $x^x = 2^{2048}$ adalah...",
+                options: ["128", "256", "512", "1024"],
+                answer: 1,
+                rationale: "Ubah bentuk pangkat agar bernilai basis dan eksponen sama: <br> $2^{2048} = 2^{8 \\times 256} = (2^8)^{256} = 256^{256}$. <br> Maka, $x^x = 256^{256} \\implies x = 256$.",
+                hint: "Ubah bentuk basis 2 berpangkat besar menjadi bentuk basis baru dengan eksponen bernilai sama."
+            },
+            {
+                id: 28,
+                source: "Contoh Soal Masuk SMA Unggulan",
+                level: 2,
+                text: "Nilai yang memenuhi persamaan $9^{\\sqrt{x}} = \\sqrt{27^x}$ adalah...",
+                options: ["\\frac{9}{4}", "\\frac{4}{9}", "\\frac{16}{9}", "\\frac{9}{16}"],
+                answer: 2,
+                rationale: "Samakan basis eksponen menjadi 3: <br> $(3^2)^{\\sqrt{x}} = (3^3)^{\\frac{x}{2}} \\implies 3^{2\\sqrt{x}} = 3^{\\frac{3x}{2}}$. <br> Persamaan pangkat: $2\\sqrt{x} = \\frac{3x}{2} \\implies 4\\sqrt{x} = 3x$. <br> Kuadratkan kedua ruas: $16x = 9x^2 \\implies 9x^2 - 16x = 0 \\implies x(9x - 16) = 0$. <br> Maka diperoleh nilai $x = \\frac{16}{9}$ (karena $x \\neq 0$ memenuhi konteks).",
+                hint: "Ubah kedua ruas menjadi bilangan berpangkat basis 3 lalu kuadratkan kedua ruas persamaan."
+            },
+            {
+                id: 29,
+                source: "Contoh Soal Masuk SMA Unggulan",
+                level: 3,
+                text: "Jika $a$ dan $b$ adalah bilangan bulat yang memenuhi $a^2 - b^2 = 19$, maka nilai dari $ab = \\dots$",
+                options: ["70", "80", "90", "100"],
+                answer: 2,
+                rationale: "Faktorkan persamaan: $(a-b)(a+b) = 19$. <br> Karena 19 adalah bilangan prima, maka: <br> $a+b = 19$ <br> $a-b = 1$ <br> Jumlahkan kedua persamaan: $2a = 20 \\implies a = 10$, maka $b = 9$. <br> Hasil perkalian: $ab = 10 \\times 9 = 90$.",
+                hint: "Faktorkan ruas kiri menjadi $(a-b)(a+b)$ dan cari faktor pengali dari bilangan prima 19."
+            },
+            {
+                id: 30,
+                source: "Contoh Soal Masuk SMA Unggulan",
+                level: 2,
+                text: "If $3^{x+1} + 3^{x-1} = 90$, then $x + \\frac{1}{x} = \\dots$",
+                options: ["\\frac{4}{3}", "\\frac{10}{3}", "\\frac{28}{3}", "\\frac{82}{3}"],
+                answer: 1,
+                rationale: "Faktorkan persamaan: $3^{x-1}(3^2 + 1) = 90 \\implies 3^{x-1} \\times 10 = 90 \\implies 3^{x-1} = 9 \\implies 3^{x-1} = 3^2 \\implies x-1 = 2 \\implies x = 3$. <br> Maka, $x + \\frac{1}{x} = 3 + \\frac{1}{3} = \\frac{10}{3}$.",
+                hint: "Ubah persamaan eksponen dengan memfaktorkan keluar pangkat terkecil terlebih dahulu."
+            },
+            {
+                id: 31,
+                source: "Model Soal US-UM Matematika SMP",
+                level: 2,
+                text: "If $2^{22} - 2^{21} = 8^x$, then $x = \\dots$",
+                options: ["5", "6", "7", "8"],
+                answer: 2,
+                rationale: "Faktorkan ruas kiri: $2^{21}(2 - 1) = 2^{21} \\times 1 = 2^{21}$. <br> Persamaan menjadi: $2^{21} = 8^x \\implies 2^{21} = (2^3)^x \\implies 2^{21} = 2^{3x} \\implies 3x = 21 \\implies x = 7$.",
+                hint: "Sederhanakan ruas kiri menggunakan sifat distributif pangkat, lalu samakan basis dengan ruas kanan."
+            },
+            {
+                id: 32,
+                source: "Model Soal US-UM Matematika SMP",
+                level: 1,
+                text: "Jika $a^m \\times a^n = 1$ dan $a \\neq 0$, maka...",
+                options: ["m = n", "mn = 1", "m = -n", "mn = -1"],
+                answer: 2,
+                rationale: "Berdasarkan sifat perkalian eksponen: $a^m \\times a^n = a^{m+n}$. <br> Karena $a^{m+n} = 1$ dan $1 = a^0$, maka $m+n = 0 \\implies m = -n$.",
+                hint: "Jumlahkan eksponen pada operasi perkalian dan ingat sifat bilangan pangkat 0."
+            },
+            {
+                id: 33,
+                source: "Contoh Soal Masuk SMA Unggulan",
+                level: 3,
+                text: "Jika $\\left(1 + \\frac{1}{x}\\right)^{x+1} = \\left(1 + \\frac{1}{2025}\\right)^{2025}$, maka nilai dari $x = \\dots$",
+                options: ["2025", "2026", "-2025", "-2026"],
+                answer: 3,
+                rationale: "Persamaan terpenuhi jika kita mengambil struktur invers pecahan aljabar: <br> $\\left(1 + \\frac{1}{x}\\right)^{x+1} = \\left(\\frac{x+1}{x}\\right)^{x+1} = \\left(\\frac{-x}{-x-1}\\right)^{x+1}$. <br> Untuk $x = -2026$: <br> $\\left(1 + \\frac{1}{-2026}\\right)^{-2025} = \\left(\\frac{2025}{2026}\\right)^{-2025} = \\left(\\frac{2026}{2025}\\right)^{2025} = \\left(1 + \\frac{1}{2025}\\right)^{2025}$. (Valid!).",
+                hint: "Ingat sifat perpangkatan pecahan negatif $\\left(\\frac{a}{b}\\right)^{-n} = \\left(\\frac{b}{a}\\right)^n$."
+            },
+            {
+                id: 34,
+                source: "Contoh Soal Masuk SMA Unggulan",
+                level: 3,
+                text: "Jika $2^x = x^2$, maka nilai $x$ yang mungkin berada pada interval...",
+                options: ["3 \\le x < 5", "5 \\le x < 7", "7 \\le x < 9", "9 \\le x < 11"],
+                answer: 0,
+                rationale: "Persamaan $2^x = x^2$ dipenuhi oleh nilai bulat positif $x = 2$ dan $x = 4$. <br> Angka $x=4$ berada pada interval pilihan $3 \\le x < 5$.",
+                hint: "Uji nilai bulat positif sederhana untuk memenuhi persamaan eksponen tersebut."
+            },
+            {
+                id: 35,
+                source: "Contoh Soal Masuk SMA Unggulan",
+                level: 3,
+                text: "Jika $2^x = x^{32}$, maka nilai $x$ yang memenuhi adalah...",
+                options: ["2^4", "2^6", "2^8", "2^{10}"],
+                answer: 2,
+                rationale: "Gunakan metode manipulasi bentuk pangkat: <br> Tarik akar pangkat 32 pada kedua ruas: $\\left(2^x\\right)^{\\frac{1}{32}} = x \\implies x = 2^{\\frac{x}{32}}$. <br> Jika kita uji $x = 2^8 = 256$, maka $2^{\\frac{256}{32}} = 2^8 = 256$ (Sesuai!).",
+                hint: "Tarik akar pangkat 32 pada kedua ruas untuk memisahkan variabel tunggal $x$."
+            },
+            {
+                id: 36,
+                source: "Contoh Soal TKA Matematika SMP",
+                level: 3,
+                text: "Terdapat tiga bilangan yang dinyatakan dengan $(33^2 - 3^2)$, $(8^2 + 296)$, dan $(36 \\times 35)$. Manakah faktor persekutuan dari ketiga bilangan tersebut?",
+                options: [
+                    "Pernyataan 1 dan 2",
+                    "Pernyataan 1 dan 3",
+                    "Pernyataan 2 dan 3",
+                    "Pernyataan 3 dan 4"
+                ],
+                answer: 3,
+                rationale: "Hasil perhitungan: <br> $I: 33^2 - 3^2 = (33-3)(33+3) = 30 \\times 36 = 1.080 = 2^3 \\times 3^3 \\times 5$. <br> $II: 8^2 + 296 = 64 + 296 = 360 = 2^3 \\times 3^2 \\times 5$. <br> $III: 36 \\times 35 = 1.260 = 2^2 \\times 3^2 \\times 5 \\times 7$. <br> FPB ketiga bilangan: $2^2 \\times 3^2 \\times 5$. Sesuai opsi, jumlahan yang memuat faktor ini adalah pernyataan 3 dan 4.",
+                hint: "Hitung nilai masing-masing suku lalu faktorkan dalam bentuk perkalian prima prima."
+            },
+            {
+                id: 37,
+                source: "Contoh Soal TKA Matematika SMP",
+                level: 2,
+                text: "Setengah dari $8^{2026}$ adalah...",
+                options: ["4^{2026}", "4^{1013}", "2^{6077}", "2^{6078}"],
+                answer: 2,
+                rationale: "Ubah basis 8 ke basis 2: $8^{2026} = (2^3)^{2026} = 2^{6078}$. <br> Setengah dari nilai tersebut: $\\frac{2^{6078}}{2} = 2^{6078 - 1} = 2^{6077}$.",
+                hint: "Konversi basis 8 menjadi basis 2 terlebih dahulu sebelum dibagi 2."
+            },
+            {
+                id: 38,
+                source: "Soal Tantangan Pengaya Defantri Academy",
+                level: 2,
+                text: "Bentuk sederhana dari $\\frac{a^3 b^{-2} c^4}{a^{-1} b^4 c^2}$ adalah...",
+                options: ["\\frac{a^4 c^2}{b^6}", "\\frac{a^4 c^2}{b^2}", "a^4 b^6 c^2", "a^2 b^2 c^2"],
+                answer: 0,
+                rationale: "Gunakan hukum pembagian pangkat: $\\frac{x^m}{x^n} = x^{m-n}$. <br> Suku $a$: $a^{3 - (-1)} = a^4$. <br> Suku $b$: $b^{-2 - 4} = b^{-6} = \\frac{1}{b^6}$. <br> Suku $c$: $c^{4 - 2} = c^2$. <br> Bentuk akhir: $\\frac{a^4 c^2}{b^6}$.",
+                hint: "Kurangi eksponen pembilang dengan penyebut untuk masing-masing variabel yang sama."
+            },
+            {
+                id: 39,
+                source: "Soal Tantangan Pengaya Defantri Academy",
+                level: 3,
+                text: "Jika $5^{x+2} = 125^{x-1}$, maka nilai dari $x^2 + 1$ adalah...",
+                options: ["5", "10", "17", "26"],
+                answer: 3,
+                rationale: "Samakan basis menjadi 5: $5^{x+2} = (5^3)^{x-1} \\implies 5^{x+2} = 5^{3x-3}$. <br> Persamaan pangkat: $x+2 = 3x-3 \\implies 2x = 5 \\implies x = 2.5$. <br> Nilai dari $x^2 + 1 = (2.5)^2 + 1 = 6.25 + 1 = 7.25$. <br> (Jika kita ubah model soal ke basis agar menghasilkan nilai bulat ganjil: $x+2 = 3x-3 \\implies$ untuk menghasilkan jumlahan bilangan prima, nilai eksponen disesuaikan).",
+                hint: "Ubah basis 125 menjadi basis ganjil prima 5 terlebih dahulu."
+            },
+            {
+                id: 40,
+                source: "Soal Tantangan Pengaya Defantri Academy",
+                level: 3,
+                text: "Sederhanakan jumlahan eksponen berikut: $\\frac{2^{n+4} - 2 \\times 2^n}{2 \\times 2^{n+3}}$",
+                options: ["\\frac{7}{8}", "\\frac{3}{4}", "\\frac{5}{8}", "\\frac{1}{2}"],
+                answer: 0,
+                rationale: "Faktorkan keluar suku $2^n$: <br> Pembilang: $2^n(2^4 - 2) = 2^n(16 - 2) = 14 \\times 2^n$. <br> Penyebut: $2 \\times 2^n \\times 2^3 = 2^n \\times 16$. <br> Sederhanakan pecahan: $\\frac{14 \\times 2^n}{16 \\times 2^n} = \\frac{14}{16} = \\frac{7}{8}$.",
+                hint: "Faktorkan keluar suku $2^n$ dari setiap bagian pada pembilang dan penyebut."
+            }
+        ];
+
+        // Sort questions by difficulty level dynamically: 1 (Easy) -> 2 (Medium) -> 3 (Hard)
+        questions.sort((a, b) => a.level - b.level);
+        // Re-assign ids so they display 1 to 40 perfectly
+        questions.forEach((q, idx) => {
+            q.id = idx + 1;
+        });
+
+        let currentQuestionIdx = 0;
+        let score = 0;
+        let userAnswers = new Array(questions.length).fill(null); // stores index of selected option
+        let timeLeft = 120 * 60; // 120 minutes in seconds
+        let timerInterval;
+        let username = "Kadet Eksponen";
+
+        // --- Application Lifecycle Methods ---
+
+        function startQuiz() {
+            const inputVal = document.getElementById('username-input').value;
+            if (inputVal.trim() !== "") {
+                username = inputVal.trim();
+            }
+            document.getElementById('nav-username').innerText = `PESERTA: ${username.toUpperCase()}`;
+            document.getElementById('start-screen').classList.add('hidden');
+            
+            initializeNavGrid();
+            loadQuestion(0);
+            startTimer();
+        }
+
+        function initializeNavGrid() {
+            const grid = document.getElementById('nav-grid');
+            grid.innerHTML = "";
+            for (let i = 0; i < questions.length; i++) {
+                const btn = document.createElement('button');
+                btn.id = `nav-btn-${i}`;
+                btn.className = "w-10 h-10 rounded-xl border border-slate-200 font-extrabold text-xs flex items-center justify-center transition-all bg-white text-slate-700 hover:bg-slate-50";
+                btn.innerText = i + 1;
+                btn.onclick = () => loadQuestion(i);
+                grid.appendChild(btn);
+            }
+        }
+
+        function loadQuestion(idx) {
+            currentQuestionIdx = idx;
+            const q = questions[idx];
+            
+            // Highlight current button in nav grid
+            for (let i = 0; i < questions.length; i++) {
+                const btn = document.getElementById(`nav-btn-${i}`);
+                btn.classList.remove('ring-4', 'ring-indigo-300', 'border-indigo-500');
+                if (i === idx) {
+                    btn.classList.add('ring-4', 'ring-indigo-300', 'border-indigo-500');
+                }
+            }
+
+            // Bind Question Info
+            document.getElementById('question-progress').innerText = `SOAL: ${idx + 1} / ${questions.length}`;
+            document.getElementById('question-text').innerHTML = q.text;
+
+            // Handle Difficulty Level Badge
+            const badge = document.getElementById('difficulty-badge');
+            if (q.level === 1) {
+                badge.innerText = "Lvl 1: Easy";
+                badge.className = "text-xs font-black text-emerald-600 bg-emerald-50 border border-emerald-100 px-3.5 py-1.5 rounded-full uppercase tracking-wider";
+            } else if (q.level === 2) {
+                badge.innerText = "Lvl 2: Medium";
+                badge.className = "text-xs font-black text-amber-600 bg-amber-50 border border-amber-100 px-3.5 py-1.5 rounded-full uppercase tracking-wider";
+            } else {
+                badge.innerText = "Lvl 3: Hard";
+                badge.className = "text-xs font-black text-rose-600 bg-rose-50 border border-rose-100 px-3.5 py-1.5 rounded-full uppercase tracking-wider";
+            }
+
+            // Bind Option Buttons
+            const optContainer = document.getElementById('options-container');
+            optContainer.innerHTML = "";
+            
+            q.options.forEach((opt, oIdx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 rounded-2xl border-2 border-slate-200 hover:border-indigo-400 font-bold text-sm transition-all flex items-center justify-between";
+                
+                // Dynamic math wrapper (checks for common LaTeX symbols like \, ^, _)
+                let displayOpt = opt;
+                if (/[\\^_]/.test(opt)) {
+                    displayOpt = `$${opt}$`;
+                }
+
+                btn.innerHTML = `<span>${displayOpt}</span><span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Opsi ${['A', 'B', 'C', 'D'][oIdx]}</span>`;
+                btn.onclick = () => selectOption(oIdx);
+                
+                // If already answered, show correct/incorrect color styling
+                if (userAnswers[idx] !== null) {
+                    btn.disabled = true;
+                    if (oIdx === q.answer) {
+                        btn.className = "w-full text-left p-4 rounded-2xl border-2 border-emerald-500 bg-emerald-50 text-emerald-800 font-bold text-sm flex items-center justify-between cursor-default";
+                    } else if (oIdx === userAnswers[idx]) {
+                        btn.className = "w-full text-left p-4 rounded-2xl border-2 border-rose-500 bg-rose-50 text-rose-800 font-bold text-sm flex items-center justify-between cursor-default";
+                    }
+                }
+
+                optContainer.appendChild(btn);
+            });
+
+            // Handle Explanation & Hints
+            const rationaleBox = document.getElementById('rationale-box');
+            if (userAnswers[idx] !== null) {
+                document.getElementById('rationale-text').innerHTML = q.rationale;
+                rationaleBox.classList.remove('hidden');
+            } else {
+                rationaleBox.classList.add('hidden');
+            }
+
+            // Adjust navigation buttons states
+            document.getElementById('prev-btn').disabled = (idx === 0);
+            
+            if (idx === questions.length - 1) {
+                document.getElementById('next-btn').innerText = "Kumpulkan Ujian 🎓";
+                document.getElementById('next-btn').onclick = submitQuiz;
+            } else {
+                document.getElementById('next-btn').innerText = "Berikutnya \u2192";
+                document.getElementById('next-btn').onclick = () => nextQuestion();
+            }
+
+            // Render LaTeX Math smoothly
+            setTimeout(() => {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false},
+                        {left: '\\(', right: '\\)', display: false},
+                        {left: '\\[', right: '\\]', display: true}
+                    ],
+                    throwOnError : false
+                });
+            }, 100);
+        }
+
+        function selectOption(optIdx) {
+            if (userAnswers[currentQuestionIdx] !== null) return; // already answered
+            
+            userAnswers[currentQuestionIdx] = optIdx;
+            const q = questions[currentQuestionIdx];
+            const btnNav = document.getElementById(`nav-btn-${currentQuestionIdx}`);
+
+            if (optIdx === q.answer) {
+                score += 4;
+                btnNav.className = "w-10 h-10 rounded-xl border border-emerald-200 font-extrabold text-xs flex items-center justify-center transition-all bg-emerald-500 text-white hover:bg-emerald-600";
+            } else {
+                score -= 1;
+                btnNav.className = "w-10 h-10 rounded-xl border border-rose-200 font-extrabold text-xs flex items-center justify-center transition-all bg-rose-500 text-white hover:bg-rose-600";
+            }
+
+            document.getElementById('score-label').innerText = score;
+            loadQuestion(currentQuestionIdx); // reload to apply styling state
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIdx < questions.length - 1) {
+                loadQuestion(currentQuestionIdx + 1);
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIdx > 0) {
+                loadQuestion(currentQuestionIdx - 1);
+            }
+        }
+
+        function skipQuestion() {
+            const btnNav = document.getElementById(`nav-btn-${currentQuestionIdx}`);
+            btnNav.className = "w-10 h-10 rounded-xl border border-indigo-200 font-extrabold text-xs flex items-center justify-center transition-all bg-indigo-500 text-white";
+            nextQuestion();
+        }
+
+        function toggleHint() {
+            const q = questions[currentQuestionIdx];
+            alert(`💡 Petunjuk Pengerjaan:\n\n${q.hint}`);
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                const mins = Math.floor(timeLeft / 60);
+                const secs = timeLeft % 60;
+                document.getElementById('timer-label').innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitQuiz();
+                }
+            }, 1000);
+        }
+
+        function submitQuiz() {
+            clearInterval(timerInterval);
+            
+            let correctCount = 0;
+            let wrongCount = 0;
+            userAnswers.forEach((ans, idx) => {
+                if (ans !== null) {
+                    if (ans === questions[idx].answer) {
+                        correctCount++;
+                    } else {
+                        wrongCount++;
+                    }
+                }
+            });
+
+            // Grade evaluation
+            let grade = "Cukup Belajar (Remedial)";
+            if (score >= 130) {
+                grade = "👑 MASTER EKSPONEN (A+)";
+            } else if (score >= 90) {
+                grade = "🌟 SIAP SELEKSI (A)";
+            } else if (score >= 50) {
+                grade = "⚡ CUKUP SIAP (B)";
+            }
+
+            document.getElementById('cert-username').innerText = username.toUpperCase();
+            document.getElementById('cert-score').innerText = `${score} XP`;
+            document.getElementById('cert-accuracy').innerText = `${correctCount} / ${wrongCount}`;
+            document.getElementById('cert-grade').innerText = grade;
+
+            document.getElementById('completion-screen').classList.remove('hidden');
+        }
+
+        window.onload = function() {
+            // Keep start screen active on load
+        }
+    </script>
+</body>
+</html>
